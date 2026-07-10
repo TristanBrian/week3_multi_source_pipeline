@@ -48,7 +48,7 @@ The notebook:
 | `week3_multi_source_pipeline.ipynb` | Main Jupyter notebook with all steps. |
 | `sensor.csv` | Cleaned operational dataset (from Week 2). |
 | `shots/daily.png` | Daily average trends of pressure, flow, and temperature. |
-| `shots/zone_boxplots.png` | Boxplots showing sensor variation across zones. |
+| `shots/flow.png` | Boxplots showing sensor variation across zones. |
 | `shots/heatmap.png` | Correlation heatmap between weather and operational metrics. |
 | `README.md` | This file. |
 
