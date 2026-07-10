@@ -170,7 +170,7 @@ Below is a preview of the correlation heatmap:
 Preview of zone-box plot:
 ![Zone-Plot Heatmap](shots/flow.png)
 
-Preview of zone-box plot:
+Preview of Daily plot:
 ![Daily Heatmap](shots/daily.png)
 
 ---
