@@ -17,7 +17,6 @@ The pipeline is delivered as a fully documented **Jupyter Notebook** (`week3_mul
 - [Analysis and Results](#analysis-and-results)
 - [Visualisation](#visualisation)
 - [Extensions and Future Work](#extensions-and-future-work)
-- [Additional Deliverables (Parts B & C)](#additional-deliverables-parts-b--c)
 - [License](#license)
 - [Author](#author)
 
