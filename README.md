@@ -50,6 +50,7 @@ The notebook:
 | `shots/daily.png` | Daily average trends of pressure, flow, and temperature. |
 | `shots/flow.png` | Boxplots showing sensor variation across zones. |
 | `shots/heatmap.png` | Correlation heatmap between weather and operational metrics. |
+| `Slide-Deck.pdf` | Pitch Deck Pdf file|
 | `README.md` | This file. |
 
 The notebook also generates (on the fly):
