@@ -45,7 +45,7 @@ The notebook:
 
 | File | Description |
 |------|-------------|
-| `week3_multi_source_pipeline.ipynb` | Main Jupyter notebook (fully commented). |
+| `week3_multi_source_pipeline.ipynb` | Main Jupyter notebook. |
 | `clean_operational_events.csv` | Cleaned operational dataset from Week 2 (provided). |
 | `correlation_heatmap.png` | Heatmap visualisation of the correlation matrix. |
 | `README.md` | This file. |
@@ -173,7 +173,5 @@ This project is for educational purposes as part of a data engineering lab.
 
 ## Author
 
-Prepared for the **Week 3** multi‑source data integration exercise. For questions, refer to the lab instructions or contact the instructor.
+Prepared for the **Week 3** multi‑source data integration exercise. For questions, refer to the lab instructions or contact the Author Tristan Bryan.
 ```
-
----
