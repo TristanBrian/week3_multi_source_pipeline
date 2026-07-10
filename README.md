@@ -160,7 +160,7 @@ Boxplots by zone reveal that the **East** zone exhibits the highest variability 
 Three key visualisations are saved in the `shots/` folder:
 
 1. **`daily.png`** – Daily average trends of pressure, flow, and temperature over the 7‑day period.
-2. **`zone_boxplots.png`** – Boxplots comparing pressure, flow, and temperature across the five zones.
+2. **`flow.png`** – Boxplots comparing pressure, flow, and temperature across the five zones.
 3. **`heatmap.png`** – Correlation heatmap between weather variables and operational metrics.
 
 Below is a preview of the correlation heatmap:
@@ -168,8 +168,10 @@ Below is a preview of the correlation heatmap:
 ![Correlation Heatmap](shots/heatmap.png)
 
 Preview of zone-box plot:
-![Correlation Heatmap](shots/flow.png)
+![Zone-Plot Heatmap](shots/flow.png)
 
+Preview of zone-box plot:
+![Daily Heatmap](shots/daily.png)
 
 ---
 
