@@ -1,6 +1,6 @@
 # Week 3 – Multi‑Source Data Pipeline
 
-This project implements a complete **multi‑source data pipeline** that integrates internal operational data, live weather data from a public API, and a supplementary holiday calendar stored in a SQLite database. The merged dataset is then used for correlation analysis to uncover relationships between operational metrics and external factors.
+This project implements a complete **multi‑source data pipeline** that integrates internal operational data, live weather data from a public API, and a supplementary holiday calendar stored in a SQLite database. The merged dataset is then used for correlation analysis and visual exploration to uncover relationships between operational metrics, weather, and temporal patterns.
 
 The pipeline is delivered as a fully documented **Jupyter Notebook** (`week3_multi_source_pipeline.ipynb`) that fulfills the requirements of the coding challenge (Part A). It is designed for reproducibility, readability, and robust error handling.
 
@@ -26,8 +26,8 @@ The pipeline is delivered as a fully documented **Jupyter Notebook** (`week3_mul
 
 The notebook:
 
-1. **Loads** a cleaned operational dataset from a CSV file (`clean_operational_events.csv`).
-2. **Fetches** daily weather data from the Open‑Meteo Archive API for the relevant date range (with graceful failure).
+1. **Loads** a cleaned operational dataset from a CSV file (`ops_sensor_log_ready_for_analysis.csv`).
+2. **Fetches** daily weather data from the Open‑Meteo Archive API for the relevant date range (with graceful failure handling).
 3. **Creates** a SQLite database (using SQLAlchemy) with a `holidays` table containing Kenyan public holidays.
 4. **Queries** the database using **`JOIN` and `GROUP BY`** to:
    - Flag each operational record as a holiday or not.
@@ -36,7 +36,8 @@ The notebook:
 6. **Analyses** the data by computing:
    - Pearson correlation between weather variables and operational metrics.
    - Average pressure on holidays vs. non‑holidays.
-7. **Visualises** the correlation matrix with a heatmap.
+   - Daily average trends and zone‑wise distributions.
+7. **Visualises** the results with three key plots.
 
 ---
 
@@ -44,14 +45,15 @@ The notebook:
 
 | File | Description |
 |------|-------------|
-| `week3_multi_source_pipeline.ipynb` | Main Jupyter notebook. |
-| `clean_operational_events.csv` | Cleaned operational dataset from Week 2 (provided). |
-| `correlation_heatmap.png` | Heatmap visualisation of the correlation matrix. |
+| `week3_multi_source_pipeline.ipynb` | Main Jupyter notebook with all steps. |
+| `ops_sensor_log_ready_for_analysis.csv` | Cleaned operational dataset (from Week 2). |
+| `shots/daily.png` | Daily average trends of pressure, flow, and temperature. |
+| `shots/zone_boxplots.png` | Boxplots showing sensor variation across zones. |
+| `shots/heatmap.png` | Correlation heatmap between weather and operational metrics. |
 | `README.md` | This file. |
 
 The notebook also generates (on the fly):
 - `supplementary.db` – SQLite database with `holidays` table.
-- `correlation_heatmap.png` – the heatmap image.
 
 ---
 
@@ -69,7 +71,7 @@ pip install pandas numpy requests sqlalchemy matplotlib seaborn
 ## Setup
 
 1. **Clone** this repository or download the files into a local directory.
-2. Ensure `clean_operational_events.csv` is in the same folder as the notebook.
+2. Ensure `ops_sensor_log_ready_for_analysis.csv` is in the same folder as the notebook.
 3. (Optional) Create a virtual environment to isolate dependencies.
 4. Install the required packages (see above).
 
@@ -89,7 +91,7 @@ Then execute all cells sequentially (Kernel → Restart & Run All). The notebook
 - Call the weather API (handles failures gracefully).
 - Build the SQLite database, insert holidays, and run two SQL queries (JOIN and JOIN + GROUP BY).
 - Merge all sources into a master DataFrame.
-- Output correlation matrices and display a heatmap.
+- Output correlation matrices and display three visualisations.
 
 The notebook is heavily commented, so each step explains the source, transformation, and purpose of the data.
 
@@ -97,8 +99,8 @@ The notebook is heavily commented, so each step explains the source, transformat
 
 ## Data Sources
 
-### 1. Internal Operational Data (`clean_operational_events.csv`)
-- **Columns**: `record_id`, `event_timestamp_utc`, `depot_id`, `depot_name`, `region`, `product_code`, `pressure_psi`, `flow_rate_lpm`, `temperature_c`, `incident_flag`, `maintenance_required`, etc.
+### 1. Internal Operational Data (`ops_sensor_log_ready_for_analysis.csv`)
+- **Columns**: `record_id`, `event_date`, `depot_id`, `depot_name`, `region`, `product_code`, `pressure_psi`, `flow_rate_lpm`, `temperature_c`, `incident_flag`, `maintenance_required`, etc.
 - A `event_date` column is derived from the timestamp for merging.
 
 ### 2. External Weather API (Open‑Meteo)
@@ -131,7 +133,7 @@ Missing weather values remain `NaN` (no imputation is performed in this version)
 - Numeric columns: `pressure_psi`, `flow_rate_lpm`, `temp_mean_c`, `precip_mm`, `wind_max_kph`.
 - Pearson correlation is computed on rows with complete weather data.
 
-From the analysis:
+Key findings from the correlation matrix:
 
 | Variable Pair | Correlation |
 |---------------|-------------|
@@ -140,18 +142,34 @@ From the analysis:
 | `temp_mean_c` vs `pressure_psi` | **0.014** (weak positive) |
 | `wind_max_kph` vs `flow_rate_lpm` | **-0.034** (weak negative) |
 
-**Conclusion:** Rainfall does **not** significantly correlate with lower throughput or pressure in this dataset. Weather factors have a very weak influence on operational metrics.
+**Conclusion:** Weather factors have a very weak influence on operational metrics in this dataset.
 
 ### Holiday Effect
-The date range (March – April 2026) does not include any of the listed Kenyan public holidays (Jan 1, May 1, Jun 1, Oct 10, Oct 20, Dec 12, Dec 25, Dec 26). Therefore, `is_holiday` is always 0, and the holiday‑pressure comparison cannot be performed for this period. However, the SQL logic is correct and would work when holidays fall within the data window.
+The date range (June 25 – July 1, 2026) does not include any Kenyan public holidays (Jan 1, May 1, Jun 1, Oct 10, Oct 20, Dec 12, Dec 25, Dec 26). Therefore, `is_holiday` is always 0, and no holiday‑pressure comparison can be performed for this period. However, the SQL logic is correct and would work when holidays fall within the data window.
+
+### Daily Trends
+The daily average plot shows that pressure, flow, and temperature remain relatively stable over the week, with slight fluctuations. Flow rate appears highest on the first and last days, while temperature gradually declines towards the end.
+
+### Zone Variations
+Boxplots by zone reveal that the **East** zone exhibits the highest variability in pressure and flow, while the **Central** zone consistently shows lower temperature readings. This information can guide maintenance priorities or operational adjustments.
 
 ---
 
 ## Visualisation
 
-The correlation matrix is visualised as a heatmap:
+Three key visualisations are saved in the `shots/` folder:
 
-![Correlation Heatmap](heatmap.png)
+1. **`daily.png`** – Daily average trends of pressure, flow, and temperature over the 7‑day period.
+2. **`zone_boxplots.png`** – Boxplots comparing pressure, flow, and temperature across the five zones.
+3. **`heatmap.png`** – Correlation heatmap between weather variables and operational metrics.
+
+Below is a preview of the correlation heatmap:
+
+![Correlation Heatmap](shots/heatmap.png)
+
+Preview of zone-box plot:
+![Correlation Heatmap](shots/flow.png)
+
 
 ---
 
@@ -172,5 +190,6 @@ This project is for educational purposes as part of a data engineering lab.
 
 ## Author
 
-Prepared for the **Week 3** multi‑source data integration exercise. For questions, refer to the lab instructions or contact the Author Tristan Bryan.
+Prepared for the **Week 3** multi‑source data integration exercise.  
+For questions, refer to the lab instructions or contact **Tristan Bryan**.
 ```
