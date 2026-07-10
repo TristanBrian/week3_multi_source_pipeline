@@ -26,7 +26,7 @@ The pipeline is delivered as a fully documented **Jupyter Notebook** (`week3_mul
 
 The notebook:
 
-1. **Loads** a cleaned operational dataset from a CSV file (`ops_sensor_log_ready_for_analysis.csv`).
+1. **Loads** a cleaned operational dataset from a CSV file (`sensor.csv`).
 2. **Fetches** daily weather data from the Open‑Meteo Archive API for the relevant date range (with graceful failure handling).
 3. **Creates** a SQLite database (using SQLAlchemy) with a `holidays` table containing Kenyan public holidays.
 4. **Queries** the database using **`JOIN` and `GROUP BY`** to:
